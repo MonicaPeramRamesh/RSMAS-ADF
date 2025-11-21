@@ -15,7 +15,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "*.csv",
 				"folderPath": {
 					"value": "@concat('daily_sales/',dataset().date_folder)\n\n",
 					"type": "Expression"
