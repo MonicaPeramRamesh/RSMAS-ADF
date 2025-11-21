@@ -4,12 +4,12 @@
 		"annotations": [],
 		"type": "SqlServer",
 		"typeProperties": {
-			"server": "@{Microsoft.KeyVault(SecretName='rsmas-prod-ne-server.database.windows.net', LinkedServiceName='AzureKeyVault_ls')\n}",
-			"database": "@{Microsoft.KeyVault(SecretName='rsmas-prod-ne-db', LinkedServiceName='AzureKeyVault_ls')\n}",
+			"server": "rsmas-prod-ne-server.database.windows.net",
+			"database": "rsmas-prod-ne-db",
 			"encrypt": "optional",
 			"trustServerCertificate": true,
 			"authenticationType": "SQL",
-			"userName": "@{Microsoft.KeyVault(SecretName='rsmas-prod-db-username', LinkedServiceName='AzureKeyVault_ls')\n}",
+			"userName": "rsmasprod",
 			"password": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
