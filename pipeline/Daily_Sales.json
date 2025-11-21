@@ -35,6 +35,8 @@
 			{
 				"name": "Web1",
 				"type": "WebActivity",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Update_Inventory",
@@ -70,11 +72,26 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[MergeInventory]",
+					"storedProcedureParameters": {
+						"ProcessType": {
+							"value": "Daily Sales",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "SqlServer",
+					"type": "LinkedServiceReference"
+				}
 			},
 			{
 				"name": "Web1_copy1",
 				"type": "WebActivity",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Daily_Sales_Job",
