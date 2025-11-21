@@ -1,6 +1,14 @@
 {
 	"name": "AzureDatabricks1",
 	"properties": {
+		"parameters": {
+			"clusterVersion": {
+				"type": "string"
+			},
+			"clusterNodeType": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureDatabricks",
 		"typeProperties": {
@@ -13,12 +21,12 @@
 				},
 				"secretName": "adf-token"
 			},
-			"newClusterNodeType": "@pipeline().parameters.clusterNodeType\n",
+			"newClusterNodeType": "@linkedService().clusterNodeType\n",
 			"newClusterNumOfWorker": "1",
 			"newClusterSparkEnvVars": {
 				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
 			},
-			"newClusterVersion": "@pipeline().parameters.clusterVersion\n",
+			"newClusterVersion": "@linkedService().clusterVersion\n",
 			"clusterOption": "Fixed",
 			"newClusterInitScripts": [],
 			"dataSecurityMode": "SINGLE_USER"
