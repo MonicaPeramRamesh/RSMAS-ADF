@@ -17,6 +17,9 @@
 					"type": "LinkedServiceReference"
 				},
 				"secretName": "rsmas-prod-db-password"
+			},
+			"alwaysEncryptedSettings": {
+				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
 			}
 		}
 	}
