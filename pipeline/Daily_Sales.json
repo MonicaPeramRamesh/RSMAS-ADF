@@ -5,6 +5,8 @@
 			{
 				"name": "Daily_Sales_Job",
 				"type": "DatabricksJob",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -14,8 +16,19 @@
 					"secureInput": false
 				},
 				"userProperties": [],
-				"typeProperties": {
-					"jobId": "362893909581191"
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks_ls",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"clusterVersion": {
+							"value": "@pipeline().globalParameters.ClusterVersion",
+							"type": "Expression"
+						},
+						"clusterNodeType": {
+							"value": "@pipeline().globalParameters.ClusterNodeType",
+							"type": "Expression"
+						}
+					}
 				}
 			},
 			{
@@ -43,6 +56,8 @@
 			{
 				"name": "Update_Inventory",
 				"type": "SqlServerStoredProcedure",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Failed",
 				"dependsOn": [
 					{
 						"activity": "Daily_Sales_Job",
@@ -92,7 +107,7 @@
 				"userProperties": []
 			},
 			{
-				"name": "Sales_Data_Check",
+				"name": "Sales_File_Check",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -102,7 +117,50 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Daily_Sales_Source",
+						"type": "DatasetReference",
+						"parameters": {
+							"date_folder": {
+								"value": "@formatDateTime(convertTimeZone(utcNow(), 'UTC', 'GMT Standard Time'), 'yyyy-MM-dd')\n",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"exists",
+						"childItems",
+						"lastModified"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "Sales_Validations",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Sales_File_Check",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@and(\n    activity('Sales_File_Check').output.exists,\n    greater(length(activity('Sales_File_Check').output.childItems), 0)\n)\n",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"annotations": []
