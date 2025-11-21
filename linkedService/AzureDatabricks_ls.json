@@ -2,10 +2,10 @@
 	"name": "AzureDatabricks_ls",
 	"properties": {
 		"parameters": {
-			"clusterVersion": {
+			"clusterNodeType": {
 				"type": "string"
 			},
-			"clusterNodeType": {
+			"clusterVersion": {
 				"type": "string"
 			}
 		},

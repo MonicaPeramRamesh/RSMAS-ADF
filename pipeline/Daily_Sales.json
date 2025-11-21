@@ -16,20 +16,6 @@
 				"userProperties": [],
 				"typeProperties": {
 					"jobId": "362893909581191"
-				},
-				"linkedServiceName": {
-					"referenceName": "AzureDatabricks1",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"clusterVersion": {
-							"value": "@pipeline().globalParameters.ClusterVersion",
-							"type": "Expression"
-						},
-						"clusterNodeType": {
-							"value": "@pipeline().globalParameters.ClusterNodeType",
-							"type": "Expression"
-						}
-					}
 				}
 			},
 			{
@@ -81,10 +67,6 @@
 							"type": "String"
 						}
 					}
-				},
-				"linkedServiceName": {
-					"referenceName": "SqlServer",
-					"type": "LinkedServiceReference"
 				}
 			},
 			{
@@ -100,6 +82,19 @@
 						]
 					}
 				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": []
+			},
+			{
+				"name": "Sales_Data_Check",
+				"type": "GetMetadata",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,

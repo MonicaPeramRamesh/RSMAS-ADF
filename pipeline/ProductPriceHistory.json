@@ -16,20 +16,6 @@
 				"userProperties": [],
 				"typeProperties": {
 					"jobId": "643438746083177"
-				},
-				"linkedServiceName": {
-					"referenceName": "AzureDatabricks1",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"clusterVersion": {
-							"value": "@pipeline().globalParameters.ClusterVersion",
-							"type": "Expression"
-						},
-						"clusterNodeType": {
-							"value": "@pipeline().globalParameters.ClusterNodeType",
-							"type": "Expression"
-						}
-					}
 				}
 			},
 			{
