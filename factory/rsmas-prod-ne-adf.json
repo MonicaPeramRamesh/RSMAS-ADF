@@ -5,6 +5,10 @@
 			"clusterVersion": {
 				"type": "string",
 				"value": "12.2 LTS (Scala 2.12, Spark 3.4.1, Python 3.10)"
+			},
+			"clusterNodeType": {
+				"type": "string",
+				"value": "Standard_DS4_v2"
 			}
 		}
 	},
