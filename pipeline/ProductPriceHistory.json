@@ -5,6 +5,8 @@
 			{
 				"name": "ProductPriceHistory_Job",
 				"type": "DatabricksJob",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Failed",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",

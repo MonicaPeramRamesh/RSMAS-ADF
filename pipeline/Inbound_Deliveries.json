@@ -5,6 +5,8 @@
 			{
 				"name": "Inbound_Deliveries_Job",
 				"type": "DatabricksJob",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -21,6 +23,8 @@
 			{
 				"name": "Update_Inventory",
 				"type": "SqlServerStoredProcedure",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Failed",
 				"dependsOn": [
 					{
 						"activity": "Inbound_Deliveries_Job",
