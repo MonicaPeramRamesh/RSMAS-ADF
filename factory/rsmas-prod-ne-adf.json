@@ -1,5 +1,13 @@
 {
 	"name": "rsmas-prod-ne-adf",
+	"properties": {
+		"globalParameters": {
+			"clusterVersion": {
+				"type": "string",
+				"value": "12.2 LTS (Scala 2.12, Spark 3.4.1, Python 3.10)"
+			}
+		}
+	},
 	"location": "northeurope",
 	"identity": {
 		"type": "SystemAssigned",
