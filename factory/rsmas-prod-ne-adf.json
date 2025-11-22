@@ -1,0 +1,16 @@
+{
+	"name": "rsmas-prod-ne-adf",
+	"properties": {
+		"globalParameters": {
+			"ClusterVersion": {
+				"type": "string",
+				"value": "13.2.x-scala2.12"
+			},
+			"ClusterNodeType": {
+				"type": "string",
+				"value": "Standard_D4s_v3"
+			}
+		}
+	},
+	"location": "northeurope"
+}
