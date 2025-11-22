@@ -8,6 +8,10 @@
 		"parameters": {
 			"date_folder": {
 				"type": "string"
+			},
+			"file_name": {
+				"type": "string",
+				"defaultValue": "''"
 			}
 		},
 		"annotations": [],
@@ -15,6 +19,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().file_name",
+					"type": "Expression"
+				},
 				"folderPath": {
 					"value": "@concat('daily_sales/',dataset().date_folder)\n\n",
 					"type": "Expression"
