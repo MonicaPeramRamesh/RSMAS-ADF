@@ -1,16 +1,9 @@
 {
 	"name": "rsmas-prod-ne-adf",
-	"properties": {
-		"globalParameters": {
-			"ClusterVersion": {
-				"type": "string",
-				"value": "13.2.x-scala2.12"
-			},
-			"ClusterNodeType": {
-				"type": "string",
-				"value": "Standard_D4s_v3"
-			}
-		}
-	},
-	"location": "northeurope"
+	"location": "northeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "90065513-0f06-482d-8717-9c4d702198ed",
+		"tenantId": "f3a01bdc-dff0-4e9a-aae3-d62d4b296ab0"
+	}
 }
