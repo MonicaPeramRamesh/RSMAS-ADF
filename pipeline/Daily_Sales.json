@@ -3,110 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Daily_Sales_Job",
-				"type": "DatabricksJob",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"linkedServiceName": {
-					"referenceName": "AzureDatabricks_ls",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"clusterVersion": {
-							"value": "@pipeline().globalParameters.ClusterVersion",
-							"type": "Expression"
-						},
-						"clusterNodeType": {
-							"value": "@pipeline().globalParameters.ClusterNodeType",
-							"type": "Expression"
-						}
-					}
-				}
-			},
-			{
-				"name": "Web1",
-				"type": "WebActivity",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [
-					{
-						"activity": "Update_Inventory",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": []
-			},
-			{
-				"name": "Update_Inventory",
-				"type": "SqlServerStoredProcedure",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Failed",
-				"dependsOn": [
-					{
-						"activity": "Daily_Sales_Job",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "[dbo].[MergeInventory]",
-					"storedProcedureParameters": {
-						"ProcessType": {
-							"value": "Daily Sales",
-							"type": "String"
-						}
-					}
-				}
-			},
-			{
-				"name": "Web1_copy1",
-				"type": "WebActivity",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [
-					{
-						"activity": "Daily_Sales_Job",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": []
-			},
-			{
 				"name": "Sales_File_Check",
 				"type": "GetMetadata",
 				"dependsOn": [],
@@ -120,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "Daily_Sales_Source",
+						"referenceName": "Daily_Sales_Source_FolderPath",
 						"type": "DatasetReference",
 						"parameters": {
 							"date_folder": {
@@ -136,6 +32,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -144,7 +41,22 @@
 				}
 			},
 			{
-				"name": "Sales_Validations",
+				"name": "Web1_copy1",
+				"type": "WebActivity",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": []
+			},
+			{
+				"name": "If Condition1",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -157,12 +69,65 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@and(\n    activity('Sales_File_Check').output.exists,\n    greater(length(activity('Sales_File_Check').output.childItems), 0)\n)\n",
+						"value": "@greater(length(activity('Sales_File_Check').output.childItems),0)",
 						"type": "Expression"
-					}
+					},
+					"ifTrueActivities": [
+						{
+							"name": "SetFilesNames",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "sales_file_list",
+								"value": {
+									"value": "@activity('Sales_File_Check').output.childItems\n",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Execute Pipeline1",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "SetFilesNames",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Sales_File_Valdiation",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"sales_file_list": {
+										"value": "@variables('sales_file_list')",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
 				}
 			}
 		],
+		"variables": {
+			"sales_file_list": {
+				"type": "Array"
+			}
+		},
 		"annotations": []
 	}
 }
