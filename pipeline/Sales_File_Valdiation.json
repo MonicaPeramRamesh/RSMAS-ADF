@@ -168,6 +168,10 @@
 										"type": "String"
 									}
 								}
+							},
+							"linkedServiceName": {
+								"referenceName": "SqlServer_ls",
+								"type": "LinkedServiceReference"
 							}
 						},
 						{
